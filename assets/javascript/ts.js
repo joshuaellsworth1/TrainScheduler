@@ -14,20 +14,25 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
+// var userTrainName = "";
+// var userDestination = "";
+// var userStartTime = 0;
+// var userFrequency = "";
+
 //creating a click function for adding train names
-$("#add-user-trainName-btn").on("click", function (event) {
+$("#searchButton").on("click", function (event) {
     event.preventDefault();
 
-    var userTrainName = $("#user-trainName-input").val().trim();
-    var userDestination = $("#user-destination-input").val().trim();
-    var userStartTime = $("#user-startTime-input").val().trim();
-    var userFrequency = $("#user-frequency-input").val().trim();
+    userTrainName = $("#user-trainName-input").val().trim();
+    userDestination = $("#user-destination-input").val().trim();
+    userStartTime = $("#user-startTime-input").val().trim();
+    userFrequency = $("#user-frequency-input").val().trim();
 
     var userData = {
-    name: userTrainName,
-    destination: userDestination,
-    startTime: userStartTime,
-    frequency: userFrequency
+        name: userTrainName,
+        destination: userDestination,
+        startTime: userStartTime,
+        frequency: userFrequency
     };
 
     database.ref().push(userData);
@@ -46,11 +51,13 @@ $("#add-user-trainName-btn").on("click", function (event) {
 });
 
 //adds trains to the firebase database
-database.ref().on("child_added", function(childSnapshot) {
-    var userTrainName = childSnapshot.val().name;
-    var userDestination = childSnapshot.val().destination;
-    var userStartTime = childSnapshot.val().startTime;
-    var userFrequency = childSnapshot.val().frequency;
+database.ref().on("child_added", function (snapshot) {
+    var userTrainName = snapshot.val().name;
+    var userDestination = snapshot.val().destination;
+    var userStartTime = snapshot.val().startTime;
+    var userFrequency = snapshot.val().frequency;
+
+    var sv = snapshot.val();
 
     var newRow = $("<tr>").append(
         $("<td>").text(userTrainName),
@@ -58,8 +65,22 @@ database.ref().on("child_added", function(childSnapshot) {
         $("<td>").text(userStartTime),
         $("<td>").text(userFrequency)
     );
+    $("#tbody").append(newRow);
+
+    $("#trainName-display").text(sv.userTrainName);
+    $("#destination-display").text(sv.destination);
+    $("#startTime-display").text(sv.startTime);
+    $("#frequency-display").text(sv.frequency);
+
+    console.log(userTrainName);
+    console.log(userDestination);
+    console.log(userStartTime);
+    console.log(userFrequency);
+
 });
 
-$("#train-table > tbody").append(newRow);
-
-
+var frequencySec = 3;
+var firstTime = "2:30";
+var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
+var currentTime = moment();
+var diffTime = moment()
