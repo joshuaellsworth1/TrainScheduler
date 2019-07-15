@@ -17,36 +17,49 @@ var database = firebase.database();
 //creating a click function for adding train names
 $("#add-user-trainName-btn").on("click", function (event) {
     event.preventDefault();
-})
 
-var userTrainName = $("#user-trainName-input").val().trim();
-var userDestination = $("#user-destination-input").val().trim();
-var userStartTime = $("#user-startTime-input").val().trim();
-var userFrequency = $("#user-frequency-input").val().trim();
+    var userTrainName = $("#user-trainName-input").val().trim();
+    var userDestination = $("#user-destination-input").val().trim();
+    var userStartTime = $("#user-startTime-input").val().trim();
+    var userFrequency = $("#user-frequency-input").val().trim();
 
-var userData = {
+    var userData = {
     name: userTrainName,
     destination: userDestination,
     startTime: userStartTime,
     frequency: userFrequency
-};
+    };
 
-database.ref().push(userData);
+    database.ref().push(userData);
 
-console.log(userData.name);
-console.log(userData.destination);
-console.log(userData.startTime);
-console.log(userData.frequency);
+    console.log(userData.name);
+    console.log(userData.destination);
+    console.log(userData.startTime);
+    console.log(userData.frequency);
 
-$("#user-trainName-input").val("");
-$("#user-destination-input").val("");
-$("#user-startTime-input").val("");
-$("#user-frequency-input").val("");
+    //clears the text in html
+    $("#user-trainName-input").val("");
+    $("#user-destination-input").val("");
+    $("#user-startTime-input").val("");
+    $("#user-frequency-input").val("");
 
+});
+
+//adds trains to the firebase database
 database.ref().on("child_added", function(childSnapshot) {
     var userTrainName = childSnapshot.val().name;
     var userDestination = childSnapshot.val().destination;
     var userStartTime = childSnapshot.val().startTime;
     var userFrequency = childSnapshot.val().frequency;
-})
+
+    var newRow = $("<tr>").append(
+        $("<td>").text(userTrainName),
+        $("<td>").text(userDestination),
+        $("<td>").text(userStartTime),
+        $("<td>").text(userFrequency)
+    );
+});
+
+$("#train-table > tbody").append(newRow);
+
 
