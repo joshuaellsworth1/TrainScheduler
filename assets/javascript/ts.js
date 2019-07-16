@@ -103,4 +103,4 @@ $(document).ready(function () {
     newRow.append("<td>" + snapshot.val().frequency + "</td>")
     $(".table").prepend(newRow);
 
-})
+});
