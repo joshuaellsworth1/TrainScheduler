@@ -77,10 +77,20 @@ database.ref().on("child_added", function (snapshot) {
     console.log(userStartTime);
     console.log(userFrequency);
 
-});
-
 var frequencySec = 3;
 var firstTime = "2:30";
 var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
 var currentTime = moment();
-var diffTime = moment()
+var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+var remainder = diffTime % frequencySec;
+var minutesAway = frequencySec - remainder;
+var nextTrain = moment().add(minutesAway, "minutes");
+
+var newRow = $("<tr></tr>")
+newRow.append("<td>" + snapshot.val().name + "</td>")
+newRow.append("<td>" + snapshot.val().destination + "</td>")
+newRow.append("<td>" + snapshot.val().startTime + "</td>")
+newRow.append("<td>" + snapshot.val().frequency + "</td>")
+$(".table").prepend(newRow);
+
+});
